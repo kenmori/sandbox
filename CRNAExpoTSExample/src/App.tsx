@@ -11,7 +11,7 @@ export default class App extends React.Component {
           <Header title="Awesomest App Ever!!!"  />
         </View>
         <View style={content}>
-          <Text>Open up App.js to start working on your app!</Text>
+          <Text>Opfafaen up App.js to start working on your app!</Text>
           <Text>Changes you make will automatically reload.</Text>
           <Text>Shake your phone to open the developer menu.</Text>
         </View>
