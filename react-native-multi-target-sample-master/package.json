@@ -1,0 +1,49 @@
+{
+  "name": "react-native-multi-target-sample",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@storybook/addon-actions": "^3.2.17",
+    "@storybook/addon-links": "^3.2.17",
+    "@storybook/react": "^3.2.17",
+    "@types/fbemitter": "^2.0.32",
+    "@types/node": "^10.11.4",
+    "@types/react-native": "^0.50.7",
+    "babel-loader": "^7.1.2",
+    "file-loader": "^1.1.5",
+    "jest-expo": "23.0.0",
+    "react-native-scripts": "1.8.1",
+    "react-test-renderer": "16.0.0",
+    "ts-loader": "^3.2.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.5"
+  },
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "deploy": "yarn build:web && yarn build-storybook && firebase deploy",
+    "build:tsc": "rm -rf dist/* && tsc -p .",
+    "start:tsc": "rm -rf dist/* && tsc -w -p .",
+    "build:web": "webpack -p --progress --config webpack.config.js",
+    "start:web": "webpack-dev-server -d --config webpack.config.js --inline --hot --colors",
+    "start": "react-native-scripts start",
+    "eject": "react-native-scripts eject",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "test": "node node_modules/jest/bin/jest.js --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook && mv storybook-static webroot/storybook"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "expo": "^23.0.4",
+    "react": "16.4.0",
+    "react-art": "^16.0.0",
+    "react-dom": "^16.4.0",
+    "react-native": "0.50.0",
+    "react-native-maps": "0.20.1",
+    "react-native-web": "^0.9.1"
+  }
+}
