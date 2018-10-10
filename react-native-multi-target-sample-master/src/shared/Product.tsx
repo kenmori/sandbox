@@ -20,7 +20,7 @@ export default (props: Props) => (
         paddingVertical: 8
       }}
     >
-      <Image source={props.source} style={{ width: 100, height: 100 }} />
+      {/*<Image source={props.source} style={{ width: 100, height: 100 }} />*/}
       <Text>{props.title}</Text>
     </View>
   </View>
