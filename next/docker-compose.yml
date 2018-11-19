@@ -1,0 +1,21 @@
+version: "2"
+services:
+  nginx:
+    image: nginx:stable
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./conf.d:/etc/nginx/conf.d"
+    links:
+      - express
+
+  express:
+    image: node:10.13.0
+    container_name: express
+    hostname: express
+      - ".:/src"
+    working_dir: /src
+    command: [sh, -c, ls -a && yarn install && yarn build && yarn start]
+    ports:
+      - "3000:3000"
