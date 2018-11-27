@@ -1,0 +1,55 @@
+Arguments: 
+  /Users/morita/.nvm/versions/node/v10.13.0/bin/node /usr/local/Cellar/yarn/1.12.3/libexec/bin/yarn.js init
+
+PATH: 
+  /Users/morita/.yarn/bin:/Users/morita/.config/yarn/global/node_modules/.bin:/Users/morita/.nvm/versions/node/v10.13.0/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/local/sbin:/Users/morita/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/Users/morita/.cargo/bin
+
+Yarn version: 
+  1.12.3
+
+Node version: 
+  10.13.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:125278:13)
+      at Interface.emit (events.js:182:13)
+      at Interface._ttyWrite (readline.js:783:16)
+      at ReadStream.onkeypress (readline.js:168:10)
+      at ReadStream.emit (events.js:182:13)
+      at emitKeys (internal/readline.js:424:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1022:36)
+      at ReadStream.emit (events.js:182:13)
+      at addChunk (_stream_readable.js:283:12)
+
+npm manifest: 
+  {
+    "name": "scotch-code-challenge",
+    "version": "1.0.0",
+    "description": "Hooked on Classes? Let's convert these class components to functional components with React Hooks!.",
+    "keywords": [],
+    "main": "src/index.js",
+    "dependencies": {
+      "react": "16.7.0-alpha.2 - next",
+      "react-dom": "16.7.0-alpha.2 - next",
+      "react-scripts": "2.0.3"
+    },
+    "devDependencies": {},
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test --env=jsdom",
+      "eject": "react-scripts eject"
+    },
+    "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
