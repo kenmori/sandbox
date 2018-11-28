@@ -1,32 +1,25 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
-class App extends Component {
-  state = {
-    name: ""
-  };
-
-  alertName = () => {
-    alert(this.state.name);
-  };
-
-  handleNameInput = e => {
-    this.setState({ name: e.target.value });
-  };
-
-  render() {
-    return (
-      <div>
-        <h3> This is a Class Component </h3>
-        <input
-          type="text"
-          onChange={this.handleNameInput}
-          value={this.state.name}
-          placeholder="Your name"
-        />
-        <button onClick={this.alertName}> Alert </button>
-      </div>
-    );
+function Six() {
+  const [name, setName] = useState("");
+  function alertName() {
+    alert(name);
   }
+  function handleNameInput(e) {
+    setName(e.target.value);
+  }
+  return (
+    <div>
+      <h3> This is a Class Component </h3>
+      <input
+        type="text"
+        onChange={handleNameInput}
+        value={name}
+        placeholder="Your name"
+      />
+      <button onClick={alertName}> Alert </button>
+    </div>
+  );
 }
 
-export default App;
+export default Six;
