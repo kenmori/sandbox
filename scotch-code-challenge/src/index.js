@@ -6,6 +6,7 @@ import Three from "./components/Three";
 import Four from "./components/Four";
 import Five from "./components/Five";
 import Six from "./components/Six";
+import { ExamplePure, ExamplePureWithMemo } from "./components/ExamplePure";
 
 import "./styles.css";
 
@@ -19,6 +20,8 @@ function App() {
         <Two />
         <Three />
         <Four />
+        <ExamplePure />
+        <ExamplePureWithMemo />
         <Five />
       </div>
     </div>
