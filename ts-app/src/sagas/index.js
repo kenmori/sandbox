@@ -1,4 +1,4 @@
-// import account from "./account";
+import top from "./top";
 // import auth from "./auth";
 // import post from "./post";
 // import search from "./search";
@@ -6,5 +6,5 @@
 // import user from "./user";
 
 export default function*() {
-  yield [];
+  yield [top()];
 }

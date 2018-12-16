@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/recompose": "^0.30.2",
+    "@types/redux-actions": "^2.3.1",
     "connected-react-router": "^6.0.0",
     "history": "^4.7.2",
     "react": "^16.6.3",
@@ -10,11 +12,14 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
+    "recompose": "^0.30.0",
     "redux": "^4.0.1",
+    "redux-actions": "^2.6.4",
     "redux-form": "^8.0.4",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
-    "redux-saga": "^0.16.2"
+    "redux-saga": "^0.16.2",
+    "store": "^2.0.12"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,9 +37,10 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "react-redux": "^6.0.0",
-    "redux-devtools-extension": "^2.13.7",
     "@types/history": "^4.7.2",
-    "@types/redux-form": "^7.4.13"
+    "@types/redux-form": "^7.4.13",
+    "json-server": "^0.14.0",
+    "react-redux": "^6.0.0",
+    "redux-devtools-extension": "^2.13.7"
   }
 }
