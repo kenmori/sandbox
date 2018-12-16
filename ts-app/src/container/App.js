@@ -42,12 +42,12 @@ const Index = props => (
         underlayColor="#f0f4f7"
         render={props => <div>fafa</div>}
       />
-      <Route
+      {/* <Route
         exact
         path="/post/"
         underlayColor="#f0f4f7"
         component={<div>fafa</div>}
-      />
+      /> */}
       <Route exact path="/post/:id/" render={props => <div>fafa</div>} />
       {/* <Route path="/profile" underlayColor="#f0f4f7" component={Account} />
       <Route path="/login" underlayColor="#f0f4f7" component={Login} />
@@ -59,13 +59,13 @@ const Index = props => (
         underlayColor="#f0f4f7"
         component={<div>fafa</div>}
       />
-      <Route
+      {/* <Route
         exact
         path="/search"
         underlayColor="#f0f4f7"
         component={<div>fafa</div>}
-      />
-      <Route exact path="/search/:name" component={<div>fafa</div>} />
+      /> */}
+      {/* <Route exact path="/search/:name" component={<div>fafa</div>} /> */}
     </Switch>
   </div>
 );
