@@ -5,6 +5,7 @@ import Two from "./components/Two";
 import Three from "./components/Three";
 import Four from "./components/Four";
 import Five from "./components/Five";
+import Six from "./components/Six";
 
 import "./styles.css";
 
@@ -14,6 +15,7 @@ function App() {
       <h1>Welcome to the Scotch Code Challenge!</h1>
       <div className="container">
         <One />
+        <Six />
         <Two />
         <Three />
         <Four />
