@@ -12,7 +12,7 @@ const App = props => (
     <Router history={props.history}>
       {/* <ErrorBoundary> */}
       <Switch>
-        <Route path="/fafa" render={() => <Root {...props} />} />
+        <Route path="/" render={() => <Root {...props} />} />
       </Switch>
       {/* </ErrorBoundary> */}
     </Router>
