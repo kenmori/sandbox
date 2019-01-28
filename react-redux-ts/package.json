@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@types/jest": "^23.3.10",
+    "@types/node": "^10.12.15",
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.7.21",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-redux": "^7.0.1"
+  }
+}
