@@ -1,5 +1,5 @@
 export default function api(url, opts) {
-  return fetch(`http://35.200.100.34/api/${url}`, opts).then(function(resp) {
+  return fetch(`http://localhost:3000/${url}`, opts).then(function(resp) {
     let json = resp.json();
     if (resp.status >= 200 && resp.status < 300) {
       return json;
