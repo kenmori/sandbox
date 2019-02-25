@@ -1,0 +1,10 @@
+{
+  "name": "elm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "node-elm-compiler": "^5.0.1",
+    "parcel-bundler": "^1.11.0"
+  }
+}
