@@ -37,8 +37,6 @@
   "dependencies": {
     "expo": "^27.0.1",
     "expo-web": "^0.0.12",
-    "react": "16.3.1",
-    "react-dom": ">=16.0.1",
     "react-dropzone": "^4.2.12",
     "react-modal": "^3.6.1",
     "react-native": "~0.55.2",
