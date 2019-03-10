@@ -302,3 +302,9 @@ const results = cursors.map(cursor => {
 })
 results
 ```
+
+https://github.com/DiveIntoHacking/udemy-graphql-with-react-intro-search-repos
+
+apollo-boost
+graphql 開発に必要な一式。
+例えば、react は react アプリケーション開発に必要なパッケージ creat-react-app
