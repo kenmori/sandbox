@@ -254,3 +254,51 @@ mutation addStar {
 ```
 
 12 インラインフラグメント
+
+13
+スカラー型＿・・・String など。GraphQL が用意しているビルドイン・これ以上分解できない最小単位
+
+14
+Relay-style cursor pagination
+
+https://www.apollographql.com/docs/react/features/pagination.html#relay-cursors
+
+Node はデータを抽象化した呼び名
+
+after が示すカーソル情報より first:５件分を要求する
+
+```
+valiables
+{
+  "after": null,
+  "before": null,
+  "first": 5,
+  "last": null,
+  "query": "フロントエンドエンジニア"
+}
+
+query searchRepositories($first: Int, $after: String, $before: String, $last: Int, $query: String!) {
+  search(first: $first, after: $after, before: $before, last: $last, query: $query, type: REPOSITORY) {
+   pageInfo {
+    endCursor
+    hasNextPage
+    hasPreviousPage
+    startCursor
+  	}
+  }
+}
+```
+
+coursle、位置情報は Base64 でエンコードされて返されている
+確認
+
+https://repl.it/site/jobs
+
+```
+const cursors = ["Y3Vyc29yOjE=", "Y3Vyc29yOjI=","Y3Vyc29yOjM=","Y3Vyc29yOjQ=","Y3Vyc29yOjU=",]
+
+const results = cursors.map(cursor => {
+  return new Buffer.from(cursor, "base64").toString("binary")
+})
+results
+```
