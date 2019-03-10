@@ -117,3 +117,140 @@ fragment commonFields on User {
 ```
 
 9. 操作名 Operation Name
+
+```
+{
+  user(login: "iteachonudemy") {
+    login,
+    bio
+  }
+}
+{
+  user(login: "gipcompany"){
+    bio
+  }
+}
+```
+
+このように書くと トップレベルでは
+Query と{}の間に何もない場合省略できるが、
+
+隠れている状態を anonimouse operation
+は一回分のリクエストには 1 つしか書くことができない
+そのエラーが出る
+「アノニマスオペレーションはオンリーワンじゃないといけない」
+
+```
+query getUser1{
+  user(login: "iteachonudemy") {
+    login,
+    bio
+  }
+}
+
+query getUser2{
+  user(login: "iteachonudemy") {
+    login,
+    bio
+  }
+}
+```
+
+getUser1、getUser ２がオペレーションネーム
+重複しないようなユニークな名前にする
+
+10. 変数
+
+hogehoge が動的に変わるときどうするのか
+
+```
+{
+  user(login: "hogehoge") {
+    login,
+    bio
+  }
+}
+```
+
+変数を定義
+
+```
+{"login": "hogehoge"}
+
+```
+
+\$login を使う
+
+```
+query ($login: String!){
+  user(login: $login) {
+    login,
+    bio
+  }
+}
+
+```
+
+String!はログイン名は null は許されないので!を記述 query に引数で変数を渡す
+
+11 ミューテーション
+クエリーではデータの更新や削除はできない
+コレをするにはミューテーションという機能を使う
+以下ミューテーションを使ってデータを更新する(create, update, delete)
+
+addStar
+removeStar
+
+スカラー型は文字列型や数値型
+オブジェクト型はスカラー型が複数組み合わさった複雑なもの
+
+AddStarInput はオブジェクト型
+ドキュメントを見ると AddStarInput は StarableId を記述する必要がある。(レポジトリの識別子)
+それをこちらは知らないので取得する必要がある
+
+Query -> repository が Repository 型を返し、そこには id が含まれることがわかる
+
+```
+{
+  repository(owner: "kenmori", name: "JavaScript") {
+    id
+    name
+    url
+  }
+}
+//////response
+
+{
+  "data": {
+    "repository": {
+      "id": "MDEwOlJlcG9zaXRvcnkyNjM0MzI5NQ==",
+      "name": "JavaScript",
+      "url": "https://github.com/kenmori/JavaScript"
+    }
+  }
+}
+```
+
+で得た id をミューテーションで実行
+
+```
+query repository {
+  repository(owner: "kenmori", name: "JavaScript") {
+    id
+    name
+    url
+  }
+}
+
+mutation addStar {
+  addStar(input: {starrableId: "MDEwOlJlcG9zaXRvcnkyNjM0MzI5NQ=="}) {
+    starrable {
+      id
+      viewerHasStarred
+    }
+  }
+}
+
+```
+
+12 インラインフラグメント
