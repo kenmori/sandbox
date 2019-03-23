@@ -308,3 +308,26 @@ https://github.com/DiveIntoHacking/udemy-graphql-with-react-intro-search-repos
 apollo-boost
 graphql 開発に必要な一式。
 例えば、react は react アプリケーション開発に必要なパッケージ creat-react-app
+
+apollo-cache-inmemory
+キャッシュ機能を追加する機能
+
+apollo-link-http
+エンドポイントを設定
+リクエストをカスタマイズする
+
+applo-link
+ミドルウェアをカスタマイズ
+github トークンを httpHEAder の aouthraization に追加する機能
+
+graphql-tag
+クエリー文字列にコンバートするために利用
+テンプレートを gql ヘルパーにテンプレートリテラルで書かれた graphql のコードを食わせることでコンバートされて変数として利用できる
+
+# react-apollo
+
+https://github.com/apollographql/react-apollo
+
+# apollo-link
+
+https://www.apollographql.com/docs/link/links/http.html
