@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Button from "@material-ui/core/Button";
 import { useEffect } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 interface HelloProps {
   name: string;
@@ -147,7 +148,298 @@ const Hello: React.FC<HelloProps> = ({ name, age }) => (
 //   console.log(state);
 // };
 
+function Index() {
+  return (
+    <div>
+      <h2>相性診断</h2>
+      <p>
+        相手に質問をして答えてもらい、どのくらい自分と相性がいいか確認するアプリです。
+      </p>
+    </div>
+  );
+}
+
+const Start = ({
+  questionNum,
+  questionLength,
+  questionKey,
+  state,
+  setCount,
+  sendState,
+  setQuesionNumber
+}) => {
+  return (
+    <div>
+      <h2>診断</h2>
+      {questionNum === questionLength ? (
+        <React.Fragment>
+          <div>終了しました</div>
+          <li>
+            <Link to="/result/" resultState={{ result: state }}>
+              結果
+            </Link>
+          </li>
+        </React.Fragment>
+      ) : (
+        <div>
+          <div>
+            <h3>
+              質問{questionNum + 1} / {questionLength}
+            </h3>
+
+            <div>{questionKey[questionNum]}</div>
+            <div style={{ marignTop: 10 }} />
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setCount(Object.assign({}, state, { [questionNum]: true }));
+                sendState(Object.assign({}, state, { [questionNum]: true }));
+                setQuesionNumber(questionNum + 1);
+              }}
+              color="primary"
+              style={{ marginRight: 10 }}
+            >
+              はい
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => {
+                setCount(Object.assign({}, state, { [questionNum]: false }));
+                sendState(Object.assign({}, state, { [questionNum]: false }));
+                setQuesionNumber(questionNum + 1);
+              }}
+            >
+              いいえ
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// id: 1
+// me: "森田"
+// resultText: {,…}
+// initObject: {0: true, 1: false, 2: true, 3: true, 4: true, 5: false, 6: true, 7: true, 8: true, 9: true, 10: true}
+// resultState: {0: true, 1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true}
+// resultText: {score: 89, label: "双子級", header: "一緒に布団で寝たときあるはず", text: "もうお互いのこと知りすぎている。これはもう何か別次元の関係",…}
+// score: 82
+// target: "松下"
+// time: "12月8日"
+const HistoryItem = props => {
+  console.log(props.match.params.id, "HIstory");
+  let historyValue;
+  //TODO 共通化
+  if (localStorage.getItem("shindan")) {
+    historyValue = JSON.parse(localStorage.getItem("shindan"));
+  }
+  const target = historyValue.filter((e, i) => {
+    return e.id === parseInt(props.match.params.id, 10);
+  });
+  const t = target[0];
+  return (
+    <div>
+      <h2>履歴詳細</h2>
+      履歴詳細です
+      <Table
+        resultText={t.resultText}
+        score={t.score}
+        questionKey={t.questionKey}
+        resultState={t.resultState}
+        initObject={t.initObject}
+      />
+    </div>
+  );
+};
+const History = () => {
+  let historyValue;
+  //TODO 共通化
+  if (localStorage.getItem("shindan")) {
+    historyValue = JSON.parse(localStorage.getItem("shindan"));
+  }
+  return (
+    <div>
+      <h2>履歴</h2>
+      <p>
+        端末に保存します。ご覧のブラウザで立ち上げた際に履歴がロードされます。ローカルストレージを消去すると履歴は削除されます
+      </p>
+      <ul>
+        {historyValue ? (
+          historyValue.map((e, i) => {
+            return (
+              <div key={i}>
+                <Link
+                  to={`/history/${e.id}/`}
+                  render={() => <HistoryItem e={e} />}
+                >
+                  {e.id}: {e.me}と{e.target} {e.time}
+                </Link>
+              </div>
+            );
+          })
+        ) : (
+          <p>履歴はありません</p>
+        )}
+      </ul>
+    </div>
+  );
+};
+const Setting = props => {
+  return (
+    <div>
+      <h2>設定</h2>
+      <Link to="/setting/question/">質問一覧</Link> <br />
+      <Link to="/setting/question/create/" render={}>
+        質問を作成する
+      </Link>
+    </div>
+  );
+};
+
+const Question = () => {
+  <div>
+    <br />
+    相手に聞きたい質問と自分の答えを設定して、相性を測りましょう。
+    <br />
+    <br />
+    彼の考え方がわかり、こちらの価値観を相手に伝えれるいい機会です。
+    <br />
+    <br />
+    答え終わった後はキャプチャに撮ってお互いの「取扱説明書」になるといいですね。
+  </div>;
+};
+
+const QuestionCreate = () => {
+  return (
+    <div>
+      <h2>質問を作成する</h2>
+    </div>
+  );
+};
+
+const Table = ({ resultText, score, questionKey, resultState, initObject }) => {
+  return (
+    <div>
+      あなたともりたさんの相性はなんと
+      <div style={{ color: "red" }}>{score}%</div>
+      <div>{resultText.header}</div>
+      <div>{resultText.text}</div>
+      <br />
+      <br />
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div>
+          <div>価値観の比較</div>
+          {questionKey.map((e, i) => {
+            return (
+              <div key={i} style={{ fontSize: 12 }}>
+                質問{i + 1} : {e}
+              </div>
+            );
+          })}
+        </div>
+        <div>
+          <div>あなた</div>
+          {Object.entries(resultState).map((e, i) => {
+            return (
+              <div key={i} style={{ fontSize: 12 }}>
+                {e[1] ? <div>○</div> : <div>×</div>}
+              </div>
+            );
+          })}
+        </div>
+        <div>
+          <div>もりた</div>
+          {Object.entries(initObject).map((e, i) => {
+            return (
+              <div key={i} style={{ fontSize: 12 }}>
+                {e[1] ? <div>○</div> : <div>×</div>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+const Result = props => {
+  let re;
+  let score;
+  let resultText;
+  const aa = Object.entries(props.resultState).map((e, i) => {
+    return e[1] === props.questionValues[i];
+  });
+  re = aa.filter(e => {
+    return e === true;
+  });
+  score = Math.round((re.length / props.questionLength) * 100);
+  resultText = lank.filter((e, i) => {
+    return score < e.score;
+  })[0];
+  function save({ resultText, score, resultState, initObject, questionKey }) {
+    let historyValue;
+    let arr = [];
+    if (localStorage.getItem("shindan")) {
+      historyValue = JSON.parse(localStorage.getItem("shindan"));
+      arr = [...historyValue];
+    }
+    arr.push({
+      id: 1,
+      me: "森田",
+      target: "松下",
+      time: "12月8日",
+      resultText,
+      score,
+      questionKey,
+      resultState,
+      initObject
+    });
+    localStorage.setItem("shindan", JSON.stringify(arr));
+  }
+  return (
+    <div>
+      <h2>Result</h2>
+      <Table
+        resultText={resultText}
+        score={score}
+        questionKey={props.questionKey}
+        resultState={props.resultState}
+        initObject={props.initObject}
+      />
+      <div style={{ fontSize: 12 }}>
+        キャプチャを撮って後々のために残しておこう!!
+      </div>
+      <br />
+      <br />
+      <Button variant="outlined">
+        <Link to="/setting/">
+          今度は自分が質問を設定して誰かに答えてもらおう
+        </Link>
+      </Button>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          save({
+            resultText,
+            score,
+            questionKey: props.questionKey,
+            resultState: props.resultState,
+            initObject: props.initObject
+          });
+        }}
+      >
+        <Link to="/history/">結果を保存する</Link>
+      </Button>
+    </div>
+  );
+};
+
 const App: React.FC = () => {
+  let obj = {};
+  quesion.forEach((e, i) => {
+    obj[i] = Object.values(e)[0];
+  });
   const [state, setCount] = React.useState(obj);
   const [questionNum, setQuesionNumber] = React.useState(0);
   const questionKey = quesion.map((e, i) => Object.keys(e)[0]);
@@ -157,130 +449,68 @@ const App: React.FC = () => {
     result: null,
     loading: false
   });
-
-  let re;
-  let obj = {};
-  let score;
-  let resultText;
-  if (resultState.loading) {
-    quesion.forEach((e, i) => {
-      obj[i] = Object.values(e)[0];
-    });
-
-    const aa = Object.entries(resultState.result).map((e, i) => {
-      return e[1] === questionValues[i];
-    });
-    re = aa.filter(e => {
-      return e === true;
-    });
-    console.log(re, "結果");
-    score = Math.round((re.length / questionLength) * 100);
-    resultText = lank.filter((e, i) => {
-      console.log(e, score, "eeeee");
-      return score < e.score;
-    })[0];
-  }
   return (
     <React.Fragment>
-      {resultState.loading ? (
+      <Router>
         <div>
-          あなたともりたさんの相性はなんと
-          <div style={{ color: "red" }}>{score}%</div>
-          <div>{resultText.header}</div>
-          <div>{resultText.text}</div>
-          <br />
-          <br />
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <div>
-              <div>価値観の比較</div>
-              {questionKey.map((e, i) => {
-                return (
-                  <div key={i} style={{ fontSize: 12 }}>
-                    質問{i + 1} : {e}
-                  </div>
-                );
-              })}
-            </div>
-            <div>
-              <div>あなた</div>
-              {Object.entries(resultState.result).map((e, i) => {
-                return (
-                  <div key={i} style={{ fontSize: 12 }}>
-                    {e[1] ? <div>○</div> : <div>×</div>}
-                  </div>
-                );
-              })}
-            </div>
-            <div>
-              <div>もりた</div>
-              {Object.entries(obj).map((e, i) => {
-                return (
-                  <div key={i} style={{ fontSize: 12 }}>
-                    {e[1] ? <div>○</div> : <div>×</div>}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <br />
-          <br />
-          <div style={{ fontSize: 12 }}>
-            キャプチャを撮って後々のために残しておこう!!
-          </div>
-          <br />
-          <br />
-          <Button variant="outlined">
-            今度は自分が質問を設定してチェックしてもらう
-          </Button>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">ホーム</Link>
+              </li>
+              <li>
+                <Link to="/setting/">設定</Link>
+              </li>
+              <li>
+                <Link to="/start/">診断スタート</Link>
+              </li>
+              <li>
+                <Link to="/history/">履歴</Link>
+              </li>
+            </ul>
+          </nav>
+          <Route
+            path="/start"
+            render={() => (
+              <Start
+                questionNum={questionNum}
+                questionLength={questionLength}
+                questionKey={questionKey}
+                state={state}
+                sendState={sendState}
+                setCount={setCount}
+                setQuesionNumber={setQuesionNumber}
+              />
+            )}
+          />
+          <Route path="/" exact component={Index} />
+          <Route path="/history/" exact render={() => <History />} />
+          <Route
+            path="/history/:id/"
+            exact
+            render={props => <HistoryItem {...props} />}
+          />
+          <Route path="/setting/" exact render={() => <Setting />} />
+          <Route path="/setting/question/" exact render={() => <Questions />} />
+          <Route
+            path="/setting/question/create/"
+            exact
+            render={() => <QuestionCreate />}
+          />
+          <Route
+            path="/result/"
+            render={() => (
+              <Result
+                questionKey={questionKey}
+                questionLength={questionLength}
+                questionValues={questionValues}
+                resultState={resultState}
+                initObject={obj}
+              />
+            )}
+          />
         </div>
-      ) : (
-        <div>
-          {questionNum === questionLength ? (
-            <React.Fragment>
-              <div>終了しました</div>
-              <Button
-                onClick={() => {
-                  console.log(state);
-                  sendState({ result: state, loading: true });
-                }}
-                color="primary"
-              >
-                診断する
-              </Button>
-            </React.Fragment>
-          ) : (
-            <div>
-              <h3>質問{questionNum + 1}</h3>
-              <div>
-                {questionNum + 1} / {questionLength}
-              </div>
-              <div>{questionKey[questionNum]}</div>
-              <div style={{ marignTop: 10 }} />
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setCount(Object.assign({}, state, { [questionNum]: true }));
-                  setQuesionNumber(questionNum + 1);
-                }}
-                color="primary"
-                style={{ marginRight: 10 }}
-              >
-                はい
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => {
-                  setCount(Object.assign({}, state, { [questionNum]: false }));
-                  setQuesionNumber(questionNum + 1);
-                }}
-              >
-                いいえ
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
+      </Router>
     </React.Fragment>
   );
 };
