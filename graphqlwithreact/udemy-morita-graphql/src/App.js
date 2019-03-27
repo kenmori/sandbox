@@ -20,7 +20,6 @@ class App extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleChange(event) {
-    console.log(event);
     this.setState({
       ...DEFAULT_STATE,
       query: event.target.value
@@ -45,7 +44,14 @@ class App extends Component {
             if (loading) return "loading";
             if (error) return `Error! ${error.message}`;
             console.log({ data });
-            return <div />;
+            const search = data.search;
+            const repositoryCount = search.repositoryCount;
+            const repositoryUnit =
+              repositoryCount === 1 ? "Repository" : "Repositories";
+            const title = `GitHub Repositories Search Results ${
+              data.search.repositoryCount
+            } ${repositoryUnit}`;
+            return <h2>{title}</h2>;
           }}
         </Query>
       </ApolloProvider>
