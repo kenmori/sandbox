@@ -14,13 +14,18 @@
     "webpack-dev-server": "^3.2.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --mode development"
+    "dev": "webpack-dev-server --mode production",
+    "build": "webpack --config webpack.prod.js"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.2",
+    "clean-webpack-plugin": "^2.0.1",
+    "formik": "^1.5.1",
+    "path": "^0.12.7",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-router-dom": "^5.0.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.3.4000",
+    "webpack-merge": "^4.2.1"
   }
 }

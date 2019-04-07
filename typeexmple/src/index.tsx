@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 import Button from "@material-ui/core/Button";
 import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 interface HelloProps {
   name: string;
   age: number;
@@ -20,26 +20,31 @@ interface Question {
 }
 
 const quesion = [
-  { お酒は好きな方だ: true },
+  { お酒は好きでよく飲む: true },
   { 料理を週に3回はする: false },
   { 休日はわりと家で過ごしたい: true },
-  { ランニングをすることは考えられない: true },
-  { デートは毎回男性が奢るべき: true },
+  { ランニングをすることは考えられない: false },
+  { 付き合ってからも毎回奢ってほしい: false },
   { キャンプが好きだ: false },
+  { 朝は弱い: false },
   { どちらかというと和食が好き: true },
-  { 結婚式は友達を呼んで挙げたい: true },
-  { 時間にはきっちりしている方だ: true },
-  { スカート派よりパンツ派だ: true },
-  { 記念日は祝いたい: true }
+  { 結婚式は親しい人とこじんまりやりたい: true },
+  { 待ち合わせ場所にはだいたい先に着いている: true },
+  { スカート派よりストレートパンツ派だ: true },
+  { いままでサプライズをしたことがある: true },
+  { ラーメンが好き: true },
+  { いざとなれば腕一本で食べていける技術がある: true },
+  { 雰囲気のあるお店が好き: false }
 ];
 
 const lank = [
   {
     score: 0,
-    label: "終わり",
-    header: "解散解散",
-    text: "合わないマジで合わないわ",
-    image: "taihen",
+    label: "なかなか難しい結果",
+    header: "人生山あり山あり",
+    text:
+      "やっていること、考えていること、これからのこと全部合わない笑。でも大丈夫。",
+    image: "help",
     resolve: "でも安心してください"
   },
   {
@@ -47,7 +52,7 @@ const lank = [
     label: "困難困難",
     header: "全然わかっていないね",
     text: "本当に難しいです大変です",
-    image: "taihen",
+    image: "help2",
     resolve: "でも安心してください"
   },
   {
@@ -55,7 +60,7 @@ const lank = [
     label: "無理無理",
     header: "難しい状態です",
     text: "まあなかなか難しい感じだね。",
-    image: "taihen",
+    image: "help3",
     resolve: "でも安心してください"
   },
   {
@@ -63,7 +68,7 @@ const lank = [
     label: "もはや他人",
     header: "あまり知らない",
     text: "でも徐々にだね",
-    image: "taihen",
+    image: "help4",
     resolve: "でも安心してください"
   },
   {
@@ -72,7 +77,7 @@ const lank = [
     header: "今。今理解しよう",
     text:
       "今後に期待だね。ちょっとどちらかが合わせればうまくいくんじゃないかな",
-    image: "taihen",
+    image: "help5",
     resolve: "でも安心してください"
   },
   {
@@ -80,7 +85,7 @@ const lank = [
     label: "まあまあな関係",
     header: "会うところもあるし合わないところもあるね",
     text: "もうすこしだけコミニュケーションすればいい感じになりそう",
-    image: "taihen",
+    image: "normal",
     resolve: "でも安心してください"
   },
   {
@@ -88,15 +93,15 @@ const lank = [
     label: "良き理解者",
     header: "理解していてグッとです",
     text: "結構息が合っている気がするね",
-    image: "taihen",
+    image: "good1",
     resolve: "でも安心してください"
   },
   {
     score: 69,
     label: "親友級",
     header: "徐々に",
-    text: "いつも一緒にいて楽しいはずだね。だって結構あっているから",
-    image: "taihen",
+    text: "いつも一緒にいて楽しいはずだね。だって結構あっているから。",
+    image: "good2",
     resolve: "でも安心してください"
   },
   {
@@ -104,7 +109,7 @@ const lank = [
     label: "家族級",
     header: "こたつ一緒レベル",
     text: "家族や家族、ずーっと家族やで",
-    image: "taihen",
+    image: "good3",
     resolve: "でも安心してください"
   },
   {
@@ -112,7 +117,7 @@ const lank = [
     label: "双子級",
     header: "一緒に布団で寝たときあるはず",
     text: "もうお互いのこと知りすぎている。これはもう何か別次元の関係",
-    image: "taihen",
+    image: "good4",
     resolve: "でも安心してください"
   },
   {
@@ -120,7 +125,7 @@ const lank = [
     label: "クローン級",
     header: "合いすぎて逆に怖い。",
     text: "すごく大変なくらい相性がいいです。どうしましょう",
-    image: "taihen",
+    image: "good5",
     resolve: "でも安心してください"
   },
   {
@@ -129,7 +134,7 @@ const lank = [
     header: "怖いもう",
     text:
       "絶対でない数字でたやん。逆にあなた一緒の人でしょもう。ないない。もう一回他人とやって",
-    image: "taihen",
+    image: "good6",
     resolve: "でも安心してください"
   }
 ];
@@ -151,14 +156,14 @@ const Hello: React.FC<HelloProps> = ({ name, age }) => (
 function Index() {
   return (
     <div>
-      <h2>相性診断</h2>
-      <p>
-        相手に質問をして答えてもらい、どのくらい自分と相性がいいか確認するアプリです。
-      </p>
+      <h2>もりたさんとの相性診断</h2>
+      <img src="/src/image/main.png" alt="" />
+      <div>森田が設定した質問に答えて自分との相性がわかります</div>
     </div>
   );
 }
 
+const Again = () => <a href="/">もう一度診断し直す</a>;
 const Start = ({
   questionNum,
   questionLength,
@@ -174,11 +179,15 @@ const Start = ({
       {questionNum === questionLength ? (
         <React.Fragment>
           <div>終了しました</div>
-          <li>
+          <Again />
+          <img src="/src/image/result.png" alt="" />
+          <div>
             <Link to="/result/" resultState={{ result: state }}>
-              結果
+              <Button variant="contained" color="primary">
+                診断結果をみる
+              </Button>
             </Link>
-          </li>
+          </div>
         </React.Fragment>
       ) : (
         <div>
@@ -291,7 +300,7 @@ const Setting = props => {
     <div>
       <h2>設定</h2>
       <Link to="/setting/question/">質問一覧</Link> <br />
-      <Link to="/setting/question/create/" render={}>
+      <Link to="/setting/question/create/" component={QuestionCreate}>
         質問を作成する
       </Link>
     </div>
@@ -311,10 +320,104 @@ const Question = () => {
   </div>;
 };
 
+const InputFeedback = ({ error }) =>
+  error ? <div className={classNames("input-feedback")}>{error}</div> : null;
+
+// Radio group
+const RadioButtonGroup = ({
+  value,
+  error,
+  touched,
+  id,
+  label,
+  className,
+  children
+}) => {
+  const classes = classNames(
+    "input-field",
+    {
+      "is-success": value || (!error && touched), // handle prefilled or user-filled
+      "is-error": !!error && touched
+    },
+    className
+  );
+
+  return (
+    <div className={classes}>
+      <fieldset>
+        <legend>{label}</legend>
+        {children}
+        {touched && <InputFeedback error={error} />}
+      </fieldset>
+    </div>
+  );
+};
+
+const Basic = () => (
+  <div>
+    <div>
+      <Formik
+        initialValues={{
+          friends: [
+            "第一印象はよかった",
+            "次も会いたいと思う",
+            "友達以上恋人未満だもう少し"
+          ]
+        }}
+        onSubmit={values =>
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+          }, 500)
+        }
+        render={({ values }) => (
+          <Form>
+            <FieldArray
+              name="friends"
+              render={arrayHelpers => (
+                <div>
+                  {values.friends && values.friends.length > 0 ? (
+                    values.friends.map((quesions, index) => (
+                      <div key={index}>
+                        <Field name={`friends.${index}`} />
+                        <Field name={`friends.${index}.result`} type="radio" />
+                        <button
+                          type="button"
+                          onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                        >
+                          -
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => arrayHelpers.insert(index, "")} // insert an empty string at a position
+                        >
+                          +
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <button type="button" onClick={() => arrayHelpers.push("")}>
+                      {/* show this when user has removed all friends from the list */}
+                      Add a friend
+                    </button>
+                  )}
+                  <div>
+                    <button type="submit">Submit</button>
+                  </div>
+                </div>
+              )}
+            />
+          </Form>
+        )}
+      />
+    </div>
+  </div>
+);
+
 const QuestionCreate = () => {
   return (
     <div>
       <h2>質問を作成する</h2>
+      <Basic />
     </div>
   );
 };
@@ -322,8 +425,11 @@ const QuestionCreate = () => {
 const Table = ({ resultText, score, questionKey, resultState, initObject }) => {
   return (
     <div>
-      あなたともりたさんの相性はなんと
-      <div style={{ color: "red" }}>{score}%</div>
+      あなたともりたさんの相性は
+      <div style={{ color: "red", fontSize: "70px", fontWeight: "bold" }}>
+        {score}%
+      </div>
+      <img src={`/src/image/${resultText.image}.png`} />
       <div>{resultText.header}</div>
       <div>{resultText.text}</div>
       <br />
@@ -399,7 +505,7 @@ const Result = props => {
   }
   return (
     <div>
-      <h2>Result</h2>
+      <h2>相性診断結果</h2>
       <Table
         resultText={resultText}
         score={score}
@@ -431,6 +537,7 @@ const Result = props => {
       >
         <Link to="/history/">結果を保存する</Link>
       </Button>
+      <Again />
     </div>
   );
 };
@@ -452,6 +559,7 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <Router>
+        <Route path="/" exact component={Index} />
         <div>
           <nav>
             <ul>
@@ -459,13 +567,13 @@ const App: React.FC = () => {
                 <Link to="/">ホーム</Link>
               </li>
               <li>
-                <Link to="/setting/">設定</Link>
+                <Link to="/setting/">設定(工事中)</Link>
               </li>
               <li>
                 <Link to="/start/">診断スタート</Link>
               </li>
               <li>
-                <Link to="/history/">履歴</Link>
+                <Link to="/history/">履歴(工事中)</Link>
               </li>
             </ul>
           </nav>
@@ -483,7 +591,7 @@ const App: React.FC = () => {
               />
             )}
           />
-          <Route path="/" exact component={Index} />
+
           <Route path="/history/" exact render={() => <History />} />
           <Route
             path="/history/:id/"
@@ -511,6 +619,13 @@ const App: React.FC = () => {
           />
         </div>
       </Router>
+      <hr />
+      {/* <div>今後の機能</div>
+      <ul>
+        <li> 自分の質問を設定できるようにする </li>
+        <li> リンクを貼れば相手が自分の質問に対して診断できる</li>
+        <li> 過去に診断した履歴を閲覧できる </li>
+      </ul> */}
     </React.Fragment>
   );
 };
