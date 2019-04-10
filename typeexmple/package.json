@@ -17,6 +17,7 @@
     "dev": "webpack-dev-server --mode development"
   },
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "typescript": "^3.3.4000"
