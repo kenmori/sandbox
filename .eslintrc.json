@@ -1,0 +1,37 @@
+{
+    "extends": ["airbnb", "prettier", "prettier/react"],
+    "settings": {
+      "import/resolver": "webpack"
+    },
+    "globals": {
+      "window": true,
+      "document": true
+    },
+    "rules": {
+      "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]} ],
+      "react/no-multi-comp": 0,
+      "semi": ["error", "always", { "omitLastInOneLineBlock": true}],
+      "quotes": ["error", "single"],
+      "react/prop-types": 0,
+      "react/destructuring-assignment": 0,
+      "react/sort-comp": 0,
+      "react/no-unused-state": 0,
+      "jsx-a11y/click-events-have-key-events": 0,
+      "jsx-a11y/label-has-associated-control": 0,
+      "jsx-a11y/label-has-for": [2, {
+        "component": ["Label"],
+        "required": {
+          "some": ["nesting", "id"]
+        },
+        "allowChildren": false
+      }],
+      "jsx-a11y/no-noninteractive-element-interactions": 0,
+      "object-curly-newline": 0,
+      "arrow-parens": 0,
+      "one-var": 0,
+      "one-var-declaration-per-line": 0,
+      "no-trailing-spaces": "error",
+      "no-underscore-dangle": 0,
+      "global-require": 0
+    }
+  }
