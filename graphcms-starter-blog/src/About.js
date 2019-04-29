@@ -2,7 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-const About = ({ data: { loading, error, authors } }) => {
+export const About = ({ data: { loading, error, authors } }) => {
   if (error) return <h1>Error fetching authors!</h1>
   if (!loading) {
     return (
@@ -26,7 +26,7 @@ const About = ({ data: { loading, error, authors } }) => {
   return <h2>Loading author...</h2>
 }
 
-export const authors = gql`
+export const AUTHERS = gql`
   query authors {
     authors {
       id
@@ -39,4 +39,4 @@ export const authors = gql`
   }
 `
 
-export default graphql(authors)(About)
+export default graphql(AUTHERS)(About)
