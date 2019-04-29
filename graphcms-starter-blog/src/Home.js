@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 
 const POSTS_PER_PAGE = 4
 
+export const H3 = (post) => <h3>{post.title}</h3>
 const Home = ({ data: { loading, error, posts, postsConnection, networkStatus }, loadMorePosts }) => {
   if (error) return <h1>Error fetching posts!</h1>
   if (posts && postsConnection) {
@@ -22,7 +23,7 @@ const Home = ({ data: { loading, error, posts, postsConnection, networkStatus },
                     src={`https://media.graphcms.com/resize=w:100,h:100,fit:crop/${post.coverImage.handle}`}
                   />
                 </div>
-                <h3>{post.title}</h3>
+                <H3 />
               </Link>
             </li>
           ))}
