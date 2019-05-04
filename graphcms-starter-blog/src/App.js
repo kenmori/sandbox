@@ -7,7 +7,7 @@ import Home from './Home'
 
 import './App.css';
 
-const App = () => {
+export const App = () => {
   return (
   <Router>
     <div>
