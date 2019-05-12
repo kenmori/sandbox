@@ -8,16 +8,17 @@ import {HttpLink} from 'apollo-link-http'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {ApolloProvider} from 'react-apollo';
 
-
 const GRAPHCMS_API = 'https://api-apeast.graphcms.com/v1/cjuz4o4wd2ir401eh2wwm62fo/master';
 const client = new ApolloClient({
     link: new HttpLink({uri: GRAPHCMS_API}),
     cache: new InMemoryCache()
 });
-const WrapApp = () => (<ApolloProvider client={client}>
+const WrapApp = () => (
+    <ApolloProvider client={client}>
         <App />
-    </ApolloProvider>)
-ReactDOM.render(
+    </ApolloProvider>
+    )
+    ReactDOM.render(
     <WrapApp />
 , document.getElementById('root')
 );
