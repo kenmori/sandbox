@@ -13,6 +13,10 @@ const DEFAULT_STATE = {
   query: "フロントエンドエンジニア"
 };
 
+const StarButton = (props) => {
+  const totalCount = props.node.stargazers.totalCount
+  return  <button > {totalCount === 1 ? '1 star' : `${totalCount} stars` }</button>
+}
 
 class App extends Component {
   constructor(props) {
@@ -86,6 +90,8 @@ class App extends Component {
                         >
                           {node.name}
                         </a>
+                        &nbsp;
+                        <StarButton node={node} />
                       </li>
                     );
                   })}
