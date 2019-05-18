@@ -16,6 +16,7 @@ const DEFAULT_STATE = {
 
 const StarButton = (props) => {
   const node = props.node
+  const {query, first, last, before, after} = props;
   const totalCount = node.stargazers.totalCount;
   const viewerHasStarred = node.viewerHasStarred;
   const starCount = totalCount === 1 ? '1 star' : `${totalCount} stars`;
@@ -25,7 +26,9 @@ const StarButton = (props) => {
     </button>
   )
   return  (
-    <Mutation mutation={viewerHasStarred ? REMOVE_STAR : ADD_STAR}>
+    <Mutation mutation={viewerHasStarred ? REMOVE_STAR : ADD_STAR}
+    refetchQueries={[{query: SEARCH_REPOSITORIES, variables: { query, first, last, before, after }}]}
+    >
     {(addorRemoveStar) => <StarStatus addorRemoveStar={addorRemoveStar} />}
     </Mutation>
     )
@@ -105,7 +108,7 @@ class App extends Component {
                           {node.name}
                         </a>
                         &nbsp;
-                        <StarButton node={node} />
+                        <StarButton node={node} query={query} first={first} last={last} before={before} after={after} />
                       </li>
                     );
                   })}
