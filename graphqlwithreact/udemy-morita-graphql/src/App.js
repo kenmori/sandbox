@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { ApolloProvider } from "react-apollo";
-import { Query } from "react-apollo";
+import { ApolloProvider, Mutation, Query } from "react-apollo";
 import client from "./client";
-import { SEARCH_REPOSITORIES } from "./graphql";
+import { SEARCH_REPOSITORIES, REMOVE_STAR, ADD_STAR } from "./graphql";
 
 const PER_PAGE = 5;
 const DEFAULT_STATE = {
@@ -13,9 +12,23 @@ const DEFAULT_STATE = {
   query: "フロントエンドエンジニア"
 };
 
+
+
 const StarButton = (props) => {
-  const totalCount = props.node.stargazers.totalCount
-  return  <button > {totalCount === 1 ? '1 star' : `${totalCount} stars` }</button>
+  const node = props.node
+  const totalCount = node.stargazers.totalCount;
+  const viewerHasStarred = node.viewerHasStarred;
+  const starCount = totalCount === 1 ? '1 star' : `${totalCount} stars`;
+  const StarStatus = ({addorRemoveStar}) => (
+    <button onClick={() => addorRemoveStar({variables: {input: {starrableId: node.id}}})}>
+      {starCount} | {viewerHasStarred ? "stared" : "-"}
+    </button>
+  )
+  return  (
+    <Mutation mutation={viewerHasStarred ? REMOVE_STAR : ADD_STAR}>
+    {(addorRemoveStar) => <StarStatus addorRemoveStar={addorRemoveStar} />}
+    </Mutation>
+    )
 }
 
 class App extends Component {
@@ -34,6 +47,7 @@ class App extends Component {
   handleSubmit(event) {
     event.preventDefault();
   }
+
   goNext(search) {
     console.log(search.pageInfo, "search.pageInfo.endCoursor");
     this.setState({
