@@ -13,6 +13,7 @@ const DEFAULT_STATE = {
   query: "フロントエンドエンジニア"
 };
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,9 +31,10 @@ class App extends Component {
     event.preventDefault();
   }
   goNext(search) {
+    console.log(search.pageInfo, "search.pageInfo.endCoursor");
     this.setState({
       first: PER_PAGE,
-      after: search.pageInfo.endCoursor,
+      after: search.pageInfo.endCursor,
       last: null,
       before: null
     });
