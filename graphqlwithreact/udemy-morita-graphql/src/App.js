@@ -30,18 +30,18 @@ const StarButton = (props) => {
         });
         const edges = data.search.edges;
         const newEdges = edges.map(edge => {
-           if(edge.node.id === node.id){
-             const totalCount = edge.node.stargazers.totalCount;
-             const diff = viewerHasStarred ? -1 : 1
-             const newTotalCount = totalCount + diff
-             edge.node.stargazers.totalCount = newTotalCount;
-           }
-           return edge
+            if(edge.node.id === node.id){
+              const totalCount = edge.node.stargazers.totalCount;
+              const diff = viewerHasStarred ? -1 : 1
+              const newTotalCount = totalCount + diff
+              edge.node.stargazers.totalCount = newTotalCount;
+            }
+            return edge
         })
         data.search.edges = newEdges;
         store.writeQuery({query: SEARCH_REPOSITORIES, data})
+        }
       }
-     }
     )}>
       {starCount} | {viewerHasStarred ? "stared" : "-"}
     </button>
