@@ -1,6 +1,21 @@
 import React, { Component } from 'react'
 import Link from './Link'
+import gql from 'graphql-tag'
+import {Query} from 'react-apollo'
 
+const FEADQUERY = gql`
+    {
+        feed {
+            links {
+                id
+                createdAt
+                url
+                description
+            }
+    }
+}
+
+`
 class LinkList extends Component {
   render() {
     const linksToRender = [
@@ -17,7 +32,22 @@ class LinkList extends Component {
     ]
 
     return (
-      <div>{linksToRender.map(link => <Link key={link.id} link={link} />)}</div>
+      <>
+        <Query query={FEADQUERY}>
+        {({loading, error, data}) => {
+          if(loading) return <div>loading</div>
+          if(error) return <div>Error</div>
+          const linksToRender = data.feed.links;
+          console.log("linksToRender",data);
+            return (
+              <div>
+              {linksToRender.map(link => <Link key={link.id} link={link} />) }
+              </div>
+            )
+          }
+          }
+        </Query>
+      </>
     )
   }
 }
