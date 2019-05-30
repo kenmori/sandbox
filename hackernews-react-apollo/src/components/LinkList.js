@@ -38,13 +38,12 @@ class LinkList extends Component {
           if(loading) return <div>loading</div>
           if(error) return <div>Error</div>
           const linksToRender = data.feed.links;
-          console.log("linksToRender",data);
             return (
-              <div>
-              {linksToRender.map(link => <Link key={link.id} link={link} />) }
-              </div>
-            )
-          }
+                <div>
+                  {linksToRender.map(link => <Link key={link.id} link={link} />) }
+                </div>
+              )
+            }
           }
         </Query>
       </>
