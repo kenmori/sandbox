@@ -13,6 +13,7 @@ const DEFAULT_STATE = {
   query: "フロントエンドエンジニア"
 };
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,12 +31,22 @@ class App extends Component {
     event.preventDefault();
   }
   goNext(search) {
+    console.log(search.pageInfo, "search.pageInfo.endCoursor");
     this.setState({
       first: PER_PAGE,
-      after: search.pageInfo.endCoursor,
+      after: search.pageInfo.endCursor,
       last: null,
       before: null
     });
+  }
+  goPreviousPage(search){
+    this.setState({
+      first: null,
+      after: null,
+      last: PER_PAGE,
+      before: search.pageInfo.startCursor
+
+    })
   }
   render() {
     const { query, first, last, before, after } = this.state;
@@ -79,6 +90,9 @@ class App extends Component {
                     );
                   })}
                 </ul>
+                {search.pageInfo.hasPreviousPage ? (
+                  <button onClick={this.goPreviousPage.bind(this, search)}>Previous</button>
+                ) : null}
                 {search.pageInfo.hasNextPage ? (
                   <button onClick={this.goNext.bind(this, search)}>Next</button>
                 ) : null}
