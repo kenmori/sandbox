@@ -18,3 +18,17 @@ next.config.js
 
 ここから拝借
 - https://github.com/zeit/next.js/blob/canary/examples/with-typescript/tsconfig.json
+
+### .bablerc を追加
+- nextの設定をbabelに伝える
+
+### pages/index.tsxの追加
+- nextがルーティングする
+
+### .nextの追加
+Nextはいつでもビルドを終えれるように、buildファイルを.nextに保存する。
+これはコミットしない
+
+### gitignore
+
+
