@@ -85,7 +85,6 @@ class App extends Component {
       after: null,
       last: PER_PAGE,
       before: search.pageInfo.startCursor
-
     })
   }
   render() {
