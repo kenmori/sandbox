@@ -5,18 +5,20 @@
   "esModuleInterop": true,
   "forceConsistentCasingInFileNames": true,
   "isolatedModules": true,
-  "jsx": "preserve",
-  "lib": ["dom", "es2017"],
-  "module": "esnext",
-  "moduleResolution": "node",
+  "jsx": "preserve", // TypeScriptにjsxをそのまま出力するように伝える
+  "lib": ["dom", "es2017"], // コンパイルに含まれる型ファイルを指定する
+  "module": "esnext", // コンパイル済みのコードで使うmoduleシステム
+  "moduleResolution": "node", // コンパイラがmoduleをどのように解決されるかを指定する。モジュール解決は、インポートが何を参照しているかを判断するためにコンパイラが使用するプロセスです。
   "noEmit": true,
   "noFallthroughCasesInSwitch": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
+  "noUnusedLocals": true, // コンパイラに定義はされているがどこでも使われていない値を報告させる
+  "noUnusedParameters": true, //Parameterとして使われていない値
   "resolveJsonModule": true,
   "skipLibCheck": true,
+  "strictNullChecks": true, // trueの場合、nullやundefinedをany型、void、undefined、null以外の型に割り当てられなくなる。runtimeでエラーを引き起こす可能性を減らす
   "strict": true,
-  "target": "esnext"
+  "noImplicitAny": true, // 暗黙的なanyにされた場合にtype-unsafeでruntimeエラーを起こさせる為、それを回避させる。anyですよと注意が出る
+  "target": "esnext" // 最終的なcompile後の受け取りたいjsバージョン
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
