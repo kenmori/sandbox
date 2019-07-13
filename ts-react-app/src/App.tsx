@@ -1,24 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Row, Rows } from './types/data';
 
-const App: React.FC = () => {
+type ThProps = {
+  row: Row;
+}
+
+const Th:React.FC<ThProps> = ({row}) => {
+  return(
+  <>
+  {row.answers.map((answers, i)=> (<li key={i}>{answers}</li>))};
+  </>
+  )
+}
+type Props = {
+  rows: Rows
+}
+
+const App:React.FunctionComponent<Props> = (props) => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {props.rows.map((row, i)=> {
+        return (
+          <Th key={i} row={row} />
+          );
+      })}
     </div>
   );
 }
