@@ -1,15 +1,3 @@
-https://facebook.github.io/create-react-app/docs/adding-typescript
-
-study react - typescript - redux - storybook -jest
-
-#1. yarn create react-app typereact --typescript
-
-#2. yarn add typescript @types/node @types/react @types/react-dom @types/jest
-
-# add 
-npm install lodash @material-ui/core @material-ui/icons react-redux redux redux-logger
-
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
