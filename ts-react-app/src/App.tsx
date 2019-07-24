@@ -9,7 +9,14 @@ type ThProps = {
 const Th:React.FC<ThProps> = ({row}) => {
   return(
   <>
-  {row.answers.map((answers, i)=> (<li key={i}>{answers}</li>))};
+  {row.answers.map((answers, i)=> {
+    if(answers === null) return <th>-</th>
+    return (
+      <>
+      <li key={i}>{answers} {row.age}</li>
+      </>
+    )
+  })};
   </>
   )
 }
