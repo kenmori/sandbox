@@ -5,6 +5,8 @@ import { RouterState, LocationChangeAction, connectRouter, routerMiddleware } fr
 import { AclManagerState, aclManagerSaga, createAclManagerReducer } from "./modules/aclManager";
 import { createLogger } from "redux-logger";
 import { spawn } from "redux-saga/effects";
+
+
 interface State {
   router: RouterState;
   aclManager: AclManagerState;
@@ -19,6 +21,7 @@ const createReducer = (history: History): Reducer<State, Action> => combineReduc
     },
   }),
 });
+
 const sagaMiddleware = createSagaMiddleware();
 
 // developmentでつかいたい middlware

@@ -26,7 +26,7 @@ const Routes: FunctionComponent = () => (
       <Header />
     </div>
     <Switch>
-      <Route path="/top" component={Top} />
+      <Route path="/" component={Top} />
       <Route path="*" component={NoMatch} />
     </Switch>
   </div>
