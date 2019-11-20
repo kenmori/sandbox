@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>authページ/OAuthテスト</title>
+  </head>
+  <body>
+    <h1>認証ページ</h1>
+    <form id="login">
+      <button type="submit">送信</button>
+    </form>
+    <script>
+      document.querySelector('#login').onsubmit = (e) => {
+        e.preventDefault()
+        // const form_data = new FormData(e.target)
+        let code = location.href.split("&")[0].split("code")[1].substr(1)
+        const obj = {
+          code: code,
+          grant_type: "authorization_code",
+          redirect_uri: 'https://kenjimorita.jp/oauth/redirect.html'
+        };
+        const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        };
+        const body = Object.keys(obj).map((key)=>key+"="+encodeURIComponent(obj[key])).join("&");
+        // const url_search_params = new URLSearchParams(form_data)
+        fetch('https://www.googleapis.com/oauth2/v4/token', {
+          method: 'POST',
+          headers,
+          body
+        }).then((res)=>{
+          res.json()
+        })
+      }
+      // function submit(){
+      //   console.log(location.href);
+      //   let code = location.href.split("&")[0].split("code")[1]
+      //   const obj = {
+      //     code,
+      //     client_id: '975933109462-h9d64tdltiuefth3qmsd4as5iljeg2ku.apps.googleusercontent.com',
+      //     client_secret: 'NnxPqvCRnx8dI9uZXlMk71-X',
+      //     grant_type: "authorization_code",
+      //     redirect_uri: 'https://kenjimorita.jp/oauth/redirect.html'
+      //   };
+      //   // const method = "POST";
+      //   const body = Object.keys(obj).map((key)=>key+"="+encodeURIComponent(obj[key])).join("&");
+      //   const headers = {
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   };
+      //   debugger;
+      //   fetch("https://www.googleapis.com/oauth2/v4/token", {method, headers, body}).then(
+      //     (res)=> res.json()
+      //   ).then(()=>{
+      //     console.log("fafa");
+      //   }
+      //   ).catch(
+      //     console.error()
+      //   );
+
+      // }
+
+    </script>
+  </body>
+</html>
