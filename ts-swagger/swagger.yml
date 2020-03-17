@@ -1,0 +1,67 @@
+swagger: "2.0"
+
+info:
+  description: "仕様書"
+  version: "1.0.0"
+  title: "API"
+
+basePath: /api/v1
+
+tags:
+  - name: auth
+    description: API
+paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: register
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: mailAddress
+              password:
+                type: string
+                description: password
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        400:
+          description: invalid request
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: serverError
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  ErrorResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        description: statusCode
+      message:
+        type: string
+        description: errorMessage
+  SuccessResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        description: statusCode
+      message:
+        type: string
+        description: message
