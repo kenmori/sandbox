@@ -1,3 +1,8 @@
+# setup-study
+
+・TypeScriptがデフォルトで使える最小単位のプロジェクト
+
+
 # Comand Practice
 
 This page is for those who want to memorize commands
