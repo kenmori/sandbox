@@ -1,7 +1,7 @@
-function component (){
+function component(){
   const element = document.createElement("div")
   const arr = ["hello", "webpack"]
-  element = _.join(arr, "");
+  element.innerHTML = _.join(arr, "");
 
   return element;
 }
