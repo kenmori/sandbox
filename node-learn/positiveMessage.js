@@ -1,10 +1,5 @@
 "use strict"
-let messages = [
-  "hi"
+exports.messages = [
+  "hi",
+  "kenji"
   ];
-  
-messages
-
-
-messages.map(e => console.log(e))
-
