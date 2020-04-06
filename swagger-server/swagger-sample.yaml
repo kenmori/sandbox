@@ -1,0 +1,822 @@
+swagger: "2.0"
+
+info:
+  description: "APIのインターフェース仕様書"
+  version: "1.2.0"
+  title: "API"
+
+basePath: /api/v1
+
+tags:
+  - name: auth
+    description: 認証に関するAPI
+  - name: user
+    description: ユーザに関するAPI
+  - name: player
+    description: 選手に関するAPI
+  - name: topic
+    description: トピックスに関するAPI
+  - name: sport
+    description: スポーツに関するAPI
+  - name: team
+    description: チームに関するAPI
+
+paths:
+  /auth/register-request:
+    post:
+      tags:
+        - auth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Emailとパスワードでユーザの仮登録を行い、メールを送信する
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: メールアドレス
+              password:
+                type: string
+                description: パスワード
+      responses:
+        200:
+          description: 仮登録成功
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        400:
+          description: 不正なリクエスト
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        409:
+          description: すでにユーザが存在する
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /auth/register:
+    post:
+      tags:
+        - auth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: 認証用Tokenを受け取ってユーザ登録する
+          required: true
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: 認証用トークン
+      responses:
+        200:
+          description: 登録成功
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              user:
+                $ref: "#/definitions/User"
+        400:
+          description: 不正なリクエスト
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /auth/login:
+    post:
+      tags:
+        - auth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Emailとパスワードでログインを行う
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: メールアドレス
+              password:
+                type: string
+                description: パスワード
+      responses:
+        200:
+          description: ログイン成功
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        400:
+          description: 不正なリクエスト
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        401:
+          description: ログイン失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /auth/logout:
+    get:
+      tags:
+        - auth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      description: ログアウトする
+      responses:
+        200:
+          description: ログアウト成功
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /users/me:
+    get:
+      tags:
+        - user
+      description: 認証結果、及び認証情報を持ったクッキーとCSRFトークンを含んだクッキーを返す
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              user:
+                $ref: "#/definitions/User"
+        401:
+          description: 認証失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/me/followers:
+    get:
+      tags:
+        - user
+      description: 該当するユーザがフォローしている選手の一覧を返す
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              players:
+                type: array
+                items:
+                  $ref: "#/definitions/FollowPlayer"
+        401:
+          description: 認証失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/me/followers/{id}:
+    put:
+      tags:
+        - user
+      description: IDに該当するプレイヤーをフォローする
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: number
+          description: プレイヤーID
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - user
+      description: IDに該当するプレイヤーのフォローを外す
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: number
+          description: プレイヤーID
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/me/email/change-request:
+    post:
+      tags:
+        - user
+      description: 新しいメールアドレスへの変更を申請する
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: 新しいメールアドレス
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        401:
+          description: 認証失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        409:
+          description: メールアドレス重複エラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/me/email:
+    patch:
+      tags:
+        - user
+      description: 登録メールアドレスを変更する
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: 認証用トークン
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        401:
+          description: 認証失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        409:
+          description: メールアドレス重複エラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/me/password/change-request:
+    post:
+      tags:
+        - user
+      description: 登録メールアドレスにパスワード変更画面のURLリンクを送信する
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: 登録メールアドレス
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        401:
+          description: 認証失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/me/password:
+    patch:
+      tags:
+        - user
+      description: パスワードを変更する
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: 認証用トークン
+              password:
+                type: string
+                description: 新しいパスワード
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        401:
+          description: 認証失敗
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /players:
+    get:
+      tags:
+        - player
+      description: 全選手情報(デフォルトで試合開始日が近い順でソート)
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: sports
+          description: スポーツジャンルで絞り込む
+          required: false
+          type: array
+          items:
+            type: number
+        - in: query
+          name: teams
+          description: チームで絞り込む
+          required: false
+          type: array
+          items:
+            type: number
+        - in: query
+          name: sort_type
+          description: ソートタイプ
+          type: string
+          format: near_match_date or unit_price
+          required: false
+        - in: query
+          name: sort_direction
+          description: ソート順
+          type: string
+          format: ASC or DESC
+          required: false
+        - in: query
+          name: offset
+          description: 上から何人目から選手を取得するかを指定する
+          type: number
+          required: false
+        - in: query
+          name: limit
+          description: 何人分の選手を取得するかを指定する
+          type: number
+          required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              pagination:
+                $ref: "#/definitions/Pagination"
+              players:
+                type: array
+                items:
+                  $ref: "#/definitions/Player"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /players/{id}:
+    get:
+      tags:
+        - player
+      description: IDに該当するプレイヤーの情報
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: number
+          description: プレイヤーID
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              player:
+                $ref: "#/definitions/PlayerDetail"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /topics/players/{id}:
+    get:
+      tags:
+        - topic
+      description: IDに該当するプレイヤーのトピックスの一覧を取得
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: number
+          description: プレイヤーID
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              topics:
+                type: array
+                items:
+                  $ref: "#/definitions/Topic"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /sports:
+    get:
+      tags:
+        - sport
+      description: スポーツ一覧を返す
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              sports:
+                type: array
+                items:
+                  $ref: "#/definitions/Sport"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /teams:
+    get:
+      tags:
+        - team
+      description: チーム一覧を返す
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              teams:
+                type: array
+                items:
+                  $ref: "#/definitions/Team"
+        500:
+          description: サーバエラー
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+definitions:
+  Pagination:
+    type: object
+    properties:
+      total_count:
+        type: number
+        description: 選手一覧の全件数
+      start_cursor:
+        type: number
+        description: 絞り込んだ選手一覧の一番後ろの要素の順番
+      end_cursor:
+        type: number
+        description: 絞り込んだ選手一覧の一番後ろの要素の順番
+      has_next_page:
+        type: boolean
+        description: 次のページが存在するかのフラグ
+      has_previous_page:
+        type: boolean
+        description: 次のページが存在するかのフラグ
+  User:
+    type: object
+    properties:
+      id:
+        type: number
+        description: ユーザのID
+      email:
+        type: string
+        description: メールアドレス
+  Player:
+    type: object
+    properties:
+      id:
+        type: number
+        description: 選手のID
+      sport_id:
+        type: number
+        description: スポーツジャンルのID
+      sport_name:
+        type: string
+        description: スポーツジャンルの名前
+      team_id:
+        type: number
+        description: チームのID
+      team_name:
+        type: string
+        description: チームの名前
+      display_name:
+        type: string
+        description: 表示用の選手名
+      unit_price:
+        type: number
+        description: 選手の株価
+      rank:
+        type: number
+        description: 株価順のランキング
+      near_match_date:
+        type: string
+        description: 一番近い試合日
+        format: yy/MM/dd hh:mm
+      diff_previous_price:
+        type: number
+        description: 直前の株価との差（現在の株価の方が高ければ正の値になる、低ければ負の値になる）
+  PlayerDetail:
+    type: object
+    properties:
+      id:
+        type: number
+        description: 選手のID
+      sport_id:
+        type: number
+        description: スポーツジャンルのID
+      sport_name:
+        type: string
+        description: スポーツジャンルの名前
+      team_id:
+        type: number
+        description: チームのID
+      team_name:
+        type: string
+        description: チームの名前
+      display_name:
+        type: string
+        description: 表示用の選手名
+      display_alphabetical_name:
+        type: string
+        description: 英語表記の選手名
+      profile:
+        $ref: "#/definitions/Profile"
+        description: 選手名のプロフィール一覧に表示する要素と値の組
+      unit_price:
+        type: number
+        description: 選手の株価
+      unit_price_updated_date:
+        type: string
+        format: yy/MM/dd
+        description: 株価の最終更新日
+      follower:
+        type: number
+        description: 選手をフォローしている人数
+      followed:
+        type: boolean
+        description: その選手をフォローしているかどうか(フォローしていればtrue)
+      rank:
+        type: number
+        description: 株価順のランキング
+      near_match_date:
+        type: string
+        description: 一番近い試合日
+        format: yy/MM/dd hh:mm
+      diff_previous_price:
+        type: number
+        description: 直前の株価との差（現在の株価の方が高ければ正の値になる、低ければ負の値になる）
+      statistics:
+        type: object
+        properties:
+          graph_scale:
+            $ref: "#/definitions/GraphScale"
+          match_details:
+            type: array
+            items:
+              $ref: "#/definitions/MatchDetail"
+          activities:
+            type: array
+            items:
+              $ref: "#/definitions/Activity"
+  FollowPlayer:
+    type: object
+    properties:
+      id:
+        type: number
+        description: 選手のID
+      sport_id:
+        type: number
+        description: スポーツジャンルのID
+      sport_name:
+        type: string
+        description: スポーツジャンルの名前
+      team_id:
+        type: number
+        description: チームのID
+      team_name:
+        type: string
+        description: チームの名前
+      display_name:
+        type: string
+        description: 表示用の選手名
+      unit_price:
+        type: number
+        description: 選手の株価
+      rank:
+        type: number
+        description: 株価順のランキング
+      near_match_date:
+        type: string
+        description: 一番近い試合日
+        format: MM/dd hh:mm
+      diff_previous_price:
+        type: number
+        description: 直前の株価との差（現在の株価の方が高ければ正の値になる、低ければ負の値になる）
+      statistics:
+        type: object
+        properties:
+          graph_scale:
+            $ref: "#/definitions/GraphScale"
+          activities:
+            type: array
+            items:
+              $ref: "#/definitions/Activity"
+  GraphScale:
+    type: object
+    properties:
+      top:
+        type: number
+      middle:
+        type: number
+  Profile:
+    type: object
+    properties:
+      rows:
+        type: array
+        items:
+          $ref: "#/definitions/Row"
+  MatchDetail:
+    type: object
+    properties:
+      match_date:
+        type: string
+        format: yy/MM/dd
+        description: 試合の開始日時
+      rows:
+        type: array
+        items:
+          $ref: "#/definitions/Row"
+  Row:
+    type: object
+    properties:
+      id:
+        type: number
+      attr_name:
+        type: string
+        description: 属性名
+      attr_value:
+        type: string
+        description: 属性値
+  Activity:
+    type: object
+    properties:
+      id:
+        type: number
+      match_id:
+        type: number
+        description: MatchDetailの配列内のidに対応した値
+      unit_price:
+        type: number
+        description: 過去の株価
+      updated_date:
+        type: string
+        format: yy/MM/dd
+        description: その株価に更新された日時
+  Topic:
+    type: object
+    properties:
+      id:
+        type: number
+      sport_name:
+        type: string
+        description: スポーツの名前
+      title:
+        type: string
+        description: 記事の名前
+      post_date:
+        type: string
+        format: yy/MM/dd
+        description: 記事が投稿された日付
+      url:
+        type: string
+        description: 記事のURL
+      image_url:
+        type: string
+        description: 記事に使われている画像のURL
+  Sport:
+    type: object
+    properties:
+      id:
+        type: number
+        description: スポーツのID
+      name:
+        type: string
+        description: スポーツ名
+  Team:
+    type: object
+    properties:
+      id:
+        type: number
+        description: チームのID
+      sport_id:
+        type: number
+        description: スポーツID
+      name:
+        type: string
+        description: チーム名
+  ErrorResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        description: ステータスコード
+      message:
+        type: string
+        description: エラーメッセージ
+  SuccessResponse:
+    type: object
+    properties:
+      status:
+        type: number
+        description: ステータスコード
+      message:
+        type: string
+        description: メッセージ
