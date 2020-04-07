@@ -37,4 +37,4 @@ api
 
  `curl -X GET "https://localhost:8081/v2/pet/findByStatus?status=available" -H "accept: application/json"`
 
- ref: [https://qiita.com/oukayuka/items/0021f8bfb45d072fd107]https://qiita.com/oukayuka/items/0021f8bfb45d072fd107()
+ ref: [https://qiita.com/oukayuka/items/0021f8bfb45d072fd107](https://qiita.com/oukayuka/items/0021f8bfb45d072fd107)
