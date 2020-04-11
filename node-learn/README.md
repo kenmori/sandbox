@@ -45,3 +45,8 @@ hi
 Session saved to: positiveMessage.js
 ```
 
+exportsは"module exports"の略。
+exportsオブジェクトに代入して他から参照できるようにする
+moduleはnodeのグローバルオブジェクトで、そこにexportsやrequire関数がいる
+
+node.jsではCommonJS(ブラウザの外でJavaScriptを実行するためにモジュールの使い方の仕様)を使う

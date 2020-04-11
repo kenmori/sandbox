@@ -1,5 +1,6 @@
 "use strict"
 
-let messages = [
-  "hi"
+exports.messages = [
+  "hi",
+  "kenji"
 ];
