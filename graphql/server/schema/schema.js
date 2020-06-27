@@ -5,9 +5,9 @@ const Movie = require("../models/movie.js")
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema } = graphql
 
 const MovieType = new GraphQLObjectType({
-  name: "Move",
+  name: "Movie",
   //読み込み順番によってリレーション先のtypeが読み込めないことがあるためクロージャーで囲い、カプセル化する
-  fileds: () => ({
+  fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     genre: {type: GraphQLString }
@@ -19,7 +19,7 @@ const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
     movie: {
-      // type: MovieType,
+      type: MovieType,
       args: {id: { type: GraphQLString}},//　検索時に使用するパラメータ
       resolve(_, args){
         // model
