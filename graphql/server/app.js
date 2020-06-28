@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 const schema = require("./schema/schema.js")
 const app = express()
 
-mongoose.connect("")
+mongoose.connect("mongodb+srv://admin:ok365a1@cluster0-mwt3x.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true })
 mongoose.connection.once("open", () => {
   console.log("db connect");
 })
