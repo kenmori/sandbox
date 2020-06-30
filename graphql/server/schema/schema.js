@@ -1,8 +1,8 @@
-const graphql = require("graphql") // graphql object
+const graphql = require("graphql")
+const Movie = require("../models/movie.js")
 
 // どのようにデータを扱うか、リレーションなどはどうするかを定義
-
-const { GraphQLObjectType, GraphQLID, GraphQLString } = graphql
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema } = graphql
 
 const MovieType = new GraphQLObjectType({
   name: "Move",
@@ -22,8 +22,13 @@ const RootQuery = new GraphQLObjectType({
       type: MovieType,
       args: {id: { type: GraphQLString}},//　検索時に使用するパラメータ
       resolve(parents, args){
-        
+        // model
+        return Movie.findById(args.id)
       } // resolve関数・・argsで取得したidを使ってデータベースからデータを取ってくる役割
     }
   }
+})
+
+module.exports = new GraphQLSchema({
+  query: RootQuery
 })
