@@ -6,5 +6,6 @@ const movieSchema = new Schema({
   genre: String
 })
 
+
 // modelの作成
 module.exports =  mongoose.model("Movie", movieSchema) // model name / schema
