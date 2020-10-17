@@ -1,11 +1,16 @@
 import { combineReducers } from "@reduxjs/toolkit"
-import * as Counter from "./features/counterSlice"
+import  counterReducers  from "./features/counterSlice"
+import { useSelector as rawUseSelector, TypedUseSelectorHook, useDispatch } from "react-redux"
+import * as Store from "./store"
 
-type counterStore = ReturnType<Counter.reducers>
-const rootReducer = combineReducers<counterStore>({
-  counter: Counter.reducers
+type A = ReturnType<typeof counterReducers>
+
+const rootReducer = combineReducers<{ counter: ReturnType<typeof counterReducers>}>({
+  counter: counterReducers
 })
 
-export type RootState = ReturnType<typeof rootReducer>
+export const useSelector: TypedUseSelectorHook<Store.RootState> = rawUseSelector
+
+
 
 export default rootReducer
