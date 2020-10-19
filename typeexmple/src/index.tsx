@@ -19,6 +19,8 @@ interface Question {
   q8: string;
 }
 
+
+
 const quesion = [
   { お酒は好きでよく飲む: true },
   { 料理を週に3回はする: false },
