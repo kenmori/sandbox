@@ -14,7 +14,7 @@ const initialState: State = {
   count: 1,
   loading: false,
   error: false,
-  errorMessage: ""
+  errorMessage: "",
 }
 
 type Responce = {
@@ -40,7 +40,6 @@ export const getData = createAsyncThunk<Responce, GetDataArgument, ActionDispatc
   async ({value}, thunkApi) => {
     await sleep(1000)
     const result = await fetch("https://jsondata.okiba.me/v1/json/6qk09201017012231")
-    console.log(result.json());
     return result.json()
   }
 )
@@ -51,7 +50,6 @@ const counter = createSlice({
   initialState,
   reducers: {
     countUp: (state: State, action: PayloadAction<number>) => {
-      // disabled eslint next-line
       return { ...state, count: state.count + action.payload}
     },
     countDown: (state: State, action: PayloadAction<number>) => {
@@ -67,6 +65,7 @@ const counter = createSlice({
         errorMessage: ""
       }
     }).addCase(getData.fulfilled, (state, action: PayloadAction<{value: number}>) => {
+      console.log(action.payload.value, "action.payload.value");
       return {
         ...state,
         count: state.count + action.payload.value,

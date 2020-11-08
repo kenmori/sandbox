@@ -8,7 +8,9 @@ import Button from "../components/Button"
 export function Component(){
   const dispatch = ReactRedux.useDispatch()
   const count = ReactRedux.useSelector<Store.RootState, number>((state) => state.counter.count)
-
+  React.useEffect(() => {
+    dispatch(CounterModule.getData({value: 1}))
+  }, [])
   const onClickDown = () => {
     dispatch(CounterModule.countDown(-1))
   }
