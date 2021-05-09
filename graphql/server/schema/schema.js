@@ -3,7 +3,22 @@ const Movie = require("../models/movie.js")
 const Director = require("../models/director.js")
 
 // どのようにデータを扱うか、リレーションなどはどうするかを定義
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLInt } = graphql
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList, GraphQLInt } = graphql
+
+const DirctorType = new GraphQLObjectType({
+  name: "Director",
+  fields: () => ({
+    id: { type: GraphQLID},
+    name: { type: GraphQLString},
+    age: {type: GraphQLInt},
+    movies: {
+      type: new GraphQLList(MovieType),
+      resolve(parent, args){
+        return Movie.find({ directorId: parent.id})
+      }
+    }
+  })
+})
 
 const MovieType = new GraphQLObjectType({
   name: "Movie",
@@ -11,18 +26,17 @@ const MovieType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    genre: {type: GraphQLString }
+    genre: {type: GraphQLString },
+    director: {
+      type: DirctorType,
+      resolve(parent, args) {
+        return Director.findById(parent.directorId)
+      }
+    }
   })
 }) // オブジェクトを生成
 
-const DirctorType = new GraphQLObjectType({
-  name: "Director",
-  fields: () => ({
-    id: { type: GraphQLID},
-    name: { type: GraphQLString},
-    age: {type: GraphQLInt}
-  })
-})
+
 // 外部からこのMOveTypeを取得できるようにqueryを定義
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -50,11 +64,16 @@ const Mutation = new GraphQLObjectType({
   fields: {
     addMovie: { // moutation名
       type: MovieType,
-      args: { name: {type: GraphQLString}, genre:{type: GraphQLString} },
+      args: {
+         name: {type: GraphQLString},
+         genre:{type: GraphQLString},
+         directorId: { type: GraphQLID}
+        },
       resolve(_, args){
         const movie = new Movie({
           name: args.name,
-          genre: args.genre
+          genre: args.genre,
+          directorId: args.directorId
         })
         return movie.save() // mongodbに送って追加した値を返してくれるので最後リターンする
       },
