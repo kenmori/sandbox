@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "graphql-yoga": "^1.17.4",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "live-server": "^1.2.1"
